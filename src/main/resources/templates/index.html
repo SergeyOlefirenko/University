@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title th:text="${title}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+<body>
+<nav class="container">
+    <ul>
+        <li><strong>Admin page</strong></li>
+    </ul>
+    <ul>
+        <li><a th:href="@{/}">Admin page</a></li>
+        <li><a th:href="@{/students}">Students</a></li>
+        <li><a th:href="@{/courses}">Courses</a></li>
+        <li><a th:href="@{/contacts}">Contacts</a></li>
+    </ul>
+</nav>
+<main class="container">
+    <form method="post" accept-charset="UTF-8" th:action="@{/add-course}" th:object="${course}">
+        <div th:if="${course}">
+            <label for="course.code">Код курса</label>
+            <input type="text" id="course.code" name="code" th:field="*{code}" />
+            <label for="course.name">Имя курса</label>
+            <input type="text" id="course.name" name="name" th:field="*{name}" />
+            <input type="submit" value="Добавить курс">
+        </div>
+    </form>
+    <form method="post" accept-charset="UTF-8" th:action="@{/add-student}" th:object="${student}">
+        <div th:if="${student}">
+            <label for="firstName">Имя:</label>
+            <input type="text" id="firstName" name="firstName" th:field="*{firstName}" required>
+<!--            <span class="error" th:if="${#fields.hasErrors('firstName')}"  th:errors="*{firstName}"></span><br>-->
+
+            <label for="lastName">Фамилия:</label>
+            <input type="text" id="lastName" name="lastName" th:field="*{lastName}" required>
+<!--            <span class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span><br>-->
+
+            <label for="birthDate">Дата рождения:</label>
+            <input type="date" id="birthDate" name="birthDate" th:field="*{birthDate}" required>
+<!--            <span class="error" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span><br>-->
+
+            <label for="phone">Телефон:</label>
+            <input type="text" id="phone" name="phone" th:field="*{phone}" required>
+<!--            <span class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span><br>-->
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:field="*{email}" required>
+<!--            <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span><br>-->
+
+            <label for="studentTicketNumber">Student ticket number:</label>
+            <input type="text" id="studentTicketNumber" name="studentTicketNumber" th:field="*{studentTicketNumber}" required>
+<!--            <span class="error" th:if="${#fields.hasErrors('studentTicketNumber')}" th:errors="*{studentTicketNumber}"></span>-->
+            <br>
+
+            <label for="course">Выбрать курс
+<!--                <input type="hidden" name="courseId" th:value="${course.id}" />-->
+<!--                <select id="course" name="course" th:field="${courses}">-->
+                <select id="course" name="courseId">
+                    <option th:each="course: ${courses}" th:value="${course.id}" th:text="${course.name}"/>
+                </select>
+            </label>
+            <input type="submit" value="Добавить новую запись">
+        </div>
+    </form>
+
+
+
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Course</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="student: ${students}">
+            <td th:text="${student.id}"></td>
+            <td th:text="${student.firstName}"></td>
+            <td th:text="${student.lastName}"></td>
+            <td>
+                <a th:href="@{/details(id=${student.id})}">Details</a>
+                <a th:href="@{/postpage(id=${student.firstName})}">Read more</a>
+                <a th:href="@{/edit(id=${student.lastName})}">Edit</a>
+                <a th:href="@{/delete(id=${student.id})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
+
+
+
+
+
+

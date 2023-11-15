@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax</title>
+</head>
+<body>
+<nav>
+    <menu>
+        <li><a th:href="@{/}">Return to Admin page</a></li>
+    </menu>
+</nav>
+<main>
+    <div>
+        <div>
+            <label for="firstName">Имя:</label>
+            <input id="firstName"/>
+        </div>
+        <div>
+            <label for="lastName">Фамилия:</label>
+            <input id="lastName"/>
+        </div>
+        <div>
+            <label for="birthDate">Дата рождения:</label>
+            <input id="birthDate"/>
+        </div>
+        <div>
+            <label for="phone">Телефон:</label>
+            <input id="phone"/>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input id="email"/>
+        </div>
+        <div>
+            <label for="studentTicketNumber">Student ticket number:</label>
+            <input id="studentTicketNumber"/>
+        </div>
+<!--        <div>-->
+<!--            <label for="courseName">Имя курса</label>-->
+<!--            <input id="courseName"/>-->
+<!--        </div>-->
+        <button id="save" type="button">Save</button>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Дата рождения</th>
+            <th>Телефон</th>
+            <th>E-mail</th>
+            <th>Номер студенческого билета</th>
+            <th>Название курса</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script>
+        const baseUrl = "/api/students";
+
+        // load student
+        function init() {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", baseUrl);
+            xhr.send();
+            xhr.addEventListener("readystatechange", function () {
+                console.log(`readyState: ${this.readyState}`);
+                if (this.readyState === this.DONE) {
+                    console.log(`status: ${this.status}`);
+                    console.log(`statusText: ${this.statusText}`);
+                    const json = this.responseText;
+                    console.log(`responseText: ${json}`);
+                    const students = JSON.parse(json);
+                    console.dir(students);
+                    populateTable(students);
+                }
+            });
+        }
+
+        function populateTable(students, isClear = true) {
+            const tbody = document.querySelector("tbody");
+            if (isClear) tbody.innerHTML = '';
+            students.forEach(student => {
+                tbody.append(createRow(student));
+            });
+        }
+
+        function createRow(student) {
+            const tr = document.createElement('tr');
+            const properties = ['id', 'firstName', 'lastName',
+                'birthDate', 'phone', 'email', 'studentTicketNumber', 'courseId'];
+            properties.forEach(prop => {
+                let td = document.createElement('td');
+                td.append(document.createTextNode(student[prop]));
+                tr.append(td);
+            });
+            return tr;
+        }
+
+        // Save student
+        const button = document.querySelector("#save");
+        const firstNameField = document.querySelector("#firstName");
+        const lastNameField = document.querySelector("#lastName");
+        const birthDateField = document.querySelector("#birthDate");
+        const phoneField = document.querySelector("#phone");
+        const emailField = document.querySelector("#email");
+        const studentTicketNumberField = document.querySelector("#studentTicketNumber");
+        const courseIdField = document.querySelector("#courseId");
+        button.addEventListener("click", async () => {
+            const student = {
+                firstName: firstNameField.value,
+                lastName: lastNameField.value,
+                birthDate: birthDateField.value,
+                phone: phoneField.value,
+                email: emailField.value,
+                studentTicketNumber: studentTicketNumberField.value,
+                courseId: courseIdField.value
+            };
+            const response = await fetch(baseUrl, {
+                method: 'POST',
+                body: JSON.stringify(student)
+            });
+            const savedStudent = response.json();
+            populateTable([savedStudent], false);
+            // const xhr = new XMLHttpRequest();
+            //
+            // xhr.open("POST", baseUrl);
+            // xhr.setRequestHeader("Content-Type", "application/json");
+            //
+            // xhr.send(JSON.stringify(student));
+            // xhr.addEventListener('readystatechange', () => {
+            //     if (xhr.readyState === xhr.DONE) {
+            //         const savedStudent = JSON.parse(xhr.responseText);
+            //         populateTable([savedStudent], false);
+            //     }
+            // });
+        });
+
+        init();
+    </script>
+</main>
+</body>
+</html>

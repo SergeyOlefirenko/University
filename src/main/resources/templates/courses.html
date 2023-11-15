@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses page</title>
+</head>
+<body>
+<h1>Список курсов</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Номер студенческого билета</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student : ${students}">
+        <td th:text="${student.firstName}"></td>
+        <td th:text="${student.lastName}"></td>
+        <td th:text="${student.studentId}"></td>
+        <td>
+            <a th:href="@{/students/{id}(id=${student.id})}">Подробнее</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/}">Добавить студента</a>
+</body>
+</html>
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add new book</title>
+</head>
+<body>
+<nav></nav>
+<main class="container">
+    <h1>New student</h1>
+<!--    <form method="post" th:action="@{/books}" th:object="${book}">-->
+<!--        <div class="grid">-->
+
+<!--            <label for="title">-->
+<!--                Title-->
+<!--                <input th:field="*{title}" id="title" placeholder="Title..." required>-->
+<!--            </label>-->
+
+<!--            <label for="pages">-->
+<!--                Pages-->
+<!--                <input type="number" min="1" id="pages" th:field="*{pages}" required>-->
+<!--            </label>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <label for="publisher">-->
+<!--                Publisher-->
+<!--                <select id="publisher" th:field="*{publisherId}">-->
+<!--                    <option th:each="publisher: ${publishers}" th:value="${publisher.id}" th:text="${publisher.name}"/>-->
+<!--                </select>-->
+<!--            </label>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Button &ndash;&gt;-->
+<!--        <button type="submit">Submit</button>-->
+
+<!--    </form>-->
+</main>
+</body>
+</html>
